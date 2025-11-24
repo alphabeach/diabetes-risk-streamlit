@@ -27,12 +27,18 @@ DB_FILE = DB_DIR / "assessment_history.csv"
 # Google Sheet ID - Set this to your publicly writable Google Sheet ID
 # See SETUP_GOOGLE_SHEET.md in the project root for setup instructions
 # Leave as None to disable cloud saving
-GOOGLE_SHEET_ID = "1zvVYeJs3rTMhRmeh-AxPSe6SAFGaXELYkVyhSwSMoho"  # Example: "1ABC123XYZ789-yourSheetId"
+GOOGLE_SHEET_ID = "1zvVYeJs3rTMhRmeh-AxPSe6SAFGaXELYkVyhSwSMoho"
+
+# Google Apps Script Webhook URL - For writing to Google Sheets from cloud
+# See GOOGLE_APPS_SCRIPT_SETUP.md for setup instructions
+# This is required for cloud data saving to work
+GOOGLE_APPS_SCRIPT_URL = None  # Set to your webhook URL: "https://script.google.com/macros/s/.../exec"
 
 
 def get_sheet_configured():
-    """Check if Google Sheet is configured"""
-    return GOOGLE_SHEET_ID is not None and GOOGLE_SHEET_ID != ""
+    """Check if Google Sheet webhook is fully configured"""
+    return (GOOGLE_SHEET_ID is not None and GOOGLE_SHEET_ID != "" and
+            GOOGLE_APPS_SCRIPT_URL is not None and GOOGLE_APPS_SCRIPT_URL != "")
 
 
 def is_cloud_environment():
@@ -131,44 +137,48 @@ def save_assessment(user_data, risk_level, risk_percentage, prediction):
     smoker = user_data['inputs'].get('Smoker', 0)
     
     # Try Google Sheets first if in cloud and configured
-    if is_cloud_environment() and GOOGLE_SHEET_ID:
+    if is_cloud_environment() and get_sheet_configured():
         try:
-            # Use simple HTTP POST to Google Forms-style endpoint
-            # This works for publicly writable sheets without authentication
             import requests
             
-            # Get current row count to assign user_id
-            csv_url = f"https://docs.google.com/spreadsheets/d/{GOOGLE_SHEET_ID}/export?format=csv"
-            response = requests.get(csv_url, timeout=5)
-            if response.status_code == 200:
-                existing_lines = response.text.strip().split('\n')
-                user_id = len(existing_lines)  # Header is line 1, so this gives next ID
-            else:
-                user_id = 1
+            # Prepare data for webhook
+            webhook_data = {
+                'timestamp': timestamp,
+                'name': name,
+                'email': email,
+                'age_category': float(age),
+                'sex': float(sex),
+                'bmi': float(bmi),
+                'high_bp': float(high_bp),
+                'high_chol': float(high_chol),
+                'smoker': float(smoker),
+                'diabetes_risk': risk_level,
+                'risk_percentage': round(float(risk_percentage), 2),
+                'prediction': int(prediction)
+            }
             
-            # Append via Google Sheets API (public write endpoint)
-            append_url = f"https://sheets.googleapis.com/v4/spreadsheets/{GOOGLE_SHEET_ID}/values/Sheet1!A:M:append"
-            values = [[
-                user_id, timestamp, name, email,
-                float(age), float(sex), float(bmi),
-                float(high_bp), float(high_chol), float(smoker),
-                risk_level, round(float(risk_percentage), 2), int(prediction)
-            ]]
-            
-            append_response = requests.post(
-                append_url,
-                json={"values": values},
-                params={"valueInputOption": "RAW"},
-                timeout=10
+            # Send to Google Apps Script webhook
+            response = requests.post(
+                GOOGLE_APPS_SCRIPT_URL,
+                json=webhook_data,
+                timeout=15
             )
             
-            if append_response.status_code in [200, 201]:
-                return True
+            if response.status_code == 200:
+                result = response.json()
+                if result.get('status') == 'success':
+                    print(f"Successfully saved to Google Sheets, user_id: {result.get('user_id')}")
+                    return True
+                else:
+                    print(f"Google Sheets webhook error: {result.get('message')}")
+                    return False
             else:
-                print(f"Google Sheets append failed: {append_response.status_code}")
+                print(f"Google Sheets webhook failed: HTTP {response.status_code}")
+                return False
+                
         except Exception as e:
             print(f"Error saving to Google Sheets: {str(e)}")
-            # Fall through to local save if not in cloud
+            return False
     
     # Local CSV saving (skip if in cloud without Google Sheets configured)
     if is_cloud_environment() and not GOOGLE_SHEET_ID:
