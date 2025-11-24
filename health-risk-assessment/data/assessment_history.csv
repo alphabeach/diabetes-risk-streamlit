@@ -1,0 +1,25 @@
+user_id,timestamp,name,email,age_category,sex,bmi,high_bp,high_chol,smoker,diabetes_risk,risk_percentage,prediction
+1,2025-11-23 10:15:30,Juan Dela Cruz,juan.delacruz@email.com,7.0,1.0,28.5,1.0,1.0,0.0,High Risk,72.3,1
+2,2025-11-23 10:32:15,Maria Santos,maria.santos@email.com,5.0,0.0,24.2,0.0,0.0,0.0,Low Risk,18.5,0
+3,2025-11-23 11:05:42,Pedro Reyes,pedro.reyes@email.com,9.0,1.0,31.8,1.0,1.0,1.0,High Risk,85.7,1
+4,2025-11-23 11:20:18,Ana Garcia,ana.garcia@email.com,6.0,0.0,26.7,1.0,0.0,0.0,Moderate Risk,45.2,0
+5,2025-11-23 12:10:05,Carlos Mendoza,carlos.mendoza@email.com,8.0,1.0,29.3,1.0,1.0,0.0,High Risk,68.9,1
+6,2025-11-23 12:45:33,Rosa Villanueva,rosa.v@email.com,4.0,0.0,22.1,0.0,0.0,0.0,Low Risk,15.3,0
+7,2025-11-23 13:22:10,Luis Torres,luis.torres@email.com,10.0,1.0,33.5,1.0,1.0,1.0,High Risk,91.2,1
+8,2025-11-23 13:50:27,Elena Ramos,elena.ramos@email.com,5.0,0.0,25.8,0.0,1.0,0.0,Moderate Risk,38.4,0
+9,2025-11-23 14:15:55,Miguel Cruz,miguel.cruz@email.com,7.0,1.0,27.9,1.0,0.0,0.0,Moderate Risk,52.6,1
+10,2025-11-23 14:40:12,Sofia Lopez,sofia.lopez@email.com,3.0,0.0,21.5,0.0,0.0,0.0,Low Risk,12.8,0
+11,2025-11-23 15:05:38,Roberto Aquino,roberto.aquino@email.com,11.0,1.0,32.4,1.0,1.0,1.0,High Risk,88.5,1
+12,2025-11-23 15:30:20,Carmen Bautista,carmen.b@email.com,6.0,0.0,28.1,1.0,1.0,0.0,Moderate Risk,58.3,1
+13,2025-11-23 16:00:45,Antonio Flores,antonio.flores@email.com,8.0,1.0,30.2,1.0,1.0,0.0,High Risk,74.1,1
+14,2025-11-23 16:25:15,Teresa Gomez,teresa.gomez@email.com,4.0,0.0,23.6,0.0,0.0,0.0,Low Risk,22.7,0
+15,2025-11-23 16:50:30,Ricardo Pascual,ricardo.p@email.com,9.0,1.0,34.1,1.0,1.0,1.0,High Risk,93.4,1
+16,2025-11-23 17:15:08,Linda Martinez,linda.martinez@email.com,5.0,0.0,24.9,0.0,1.0,0.0,Moderate Risk,41.5,0
+17,2025-11-23 17:40:22,Fernando Silva,fernando.silva@email.com,7.0,1.0,29.7,1.0,0.0,1.0,High Risk,66.8,1
+18,2025-11-23 18:05:50,Gloria Navarro,gloria.navarro@email.com,6.0,0.0,26.3,1.0,0.0,0.0,Moderate Risk,48.2,0
+19,2025-11-23 18:30:11,Ramon Castro,ramon.castro@email.com,10.0,1.0,31.2,1.0,1.0,1.0,High Risk,82.6,1
+20,2025-11-23 18:55:40,Patricia Diaz,patricia.diaz@email.com,4.0,0.0,23.1,0.0,0.0,0.0,Low Risk,19.4,0
+21,2025-11-23 19:00:13,resty cailao,restycailao@gmail.com,1.0,1.0,25.0,1.0,0.0,1.0,Low Risk,14.21,0
+22,2025-11-23 19:08:04,Anonymous,,7.0,0.0,25.0,0.0,0.0,0.0,Low Risk,22.79,0
+23,2025-11-23 19:20:11,Anonymous,,7.0,0.0,25.0,0.0,0.0,0.0,Low Risk,22.79,0
+24,2025-11-24 15:35:35,Eliseo Lim,,1.0,1.0,25.0,1.0,1.0,1.0,Low Risk,18.33,0

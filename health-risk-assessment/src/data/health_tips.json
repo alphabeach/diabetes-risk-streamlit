@@ -1,0 +1,125 @@
+{
+  "low_risk": {
+    "general": [
+      "Maintain a balanced diet rich in vegetables, fruits, whole grains, and lean proteins",
+      "Continue regular physical activity with at least 150 minutes of moderate exercise per week",
+      "Monitor your weight and keep BMI in the healthy range (18.5-24.9)",
+      "Get adequate sleep (7-9 hours per night) for optimal metabolic health",
+      "Stay hydrated by drinking plenty of water throughout the day",
+      "Limit consumption of sugary beverages and processed foods",
+      "Avoid smoking and limit alcohol consumption",
+      "Manage stress through healthy coping strategies like meditation or yoga",
+      "Get regular health screenings and check-ups",
+      "Maintain healthy relationships and social connections"
+    ],
+    "diet": [
+      "Fill half your plate with non-starchy vegetables at each meal",
+      "Choose whole grains over refined carbohydrates",
+      "Include lean protein sources like fish, chicken, beans, and tofu",
+      "Limit saturated fats and choose healthy fats from nuts, avocados, and olive oil",
+      "Practice portion control using smaller plates",
+      "Eat regular meals and avoid skipping breakfast",
+      "Reduce sodium intake to less than 2,300mg per day"
+    ],
+    "exercise": [
+      "Aim for 30 minutes of moderate activity most days of the week",
+      "Include both aerobic exercise and strength training",
+      "Take breaks from sitting every hour with short walks or stretches",
+      "Find activities you enjoy to maintain consistency",
+      "Consider joining group fitness classes or walking groups for motivation"
+    ]
+  },
+  "moderate_risk": {
+    "general": [
+      "Schedule a check-up with your healthcare provider within the next month",
+      "Request blood work including fasting glucose and HbA1c tests",
+      "Start tracking your food intake and physical activity",
+      "Set realistic weight loss goals if overweight (aim for 5-10% body weight reduction)",
+      "Monitor blood pressure regularly if you have hypertension",
+      "Get cholesterol levels checked and managed if elevated",
+      "Consider joining a diabetes prevention program (DPP)",
+      "Educate yourself about prediabetes and diabetes prevention",
+      "Work with a registered dietitian for personalized meal planning",
+      "Find an accountability partner or support group"
+    ],
+    "diet": [
+      "Eliminate or significantly reduce sugary drinks and desserts",
+      "Cut back on processed and fast foods",
+      "Focus on low-glycemic index foods to manage blood sugar",
+      "Increase fiber intake to at least 25-30 grams per day",
+      "Plan and prepare meals in advance to avoid unhealthy choices",
+      "Read nutrition labels carefully and watch portion sizes",
+      "Limit refined carbohydrates like white bread, pasta, and rice",
+      "Include more plant-based meals in your diet"
+    ],
+    "exercise": [
+      "Gradually increase physical activity to 30-60 minutes daily",
+      "Start with low-impact activities if you have mobility issues",
+      "Add resistance training 2-3 times per week to build muscle",
+      "Track your steps with a goal of 10,000 steps per day",
+      "Schedule exercise like an appointment to prioritize it",
+      "Consider working with a personal trainer or physical therapist"
+    ]
+  },
+  "high_risk": {
+    "general": [
+      "Schedule an immediate appointment with your healthcare provider (within 1 week)",
+      "Request comprehensive blood work including fasting glucose, HbA1c, and lipid panel",
+      "Discuss medication options with your doctor for diabetes prevention",
+      "Consider referral to an endocrinologist for specialized care",
+      "Enroll in a structured diabetes prevention program",
+      "Check blood pressure and blood sugar regularly as directed",
+      "Work with a registered dietitian and certified diabetes educator",
+      "Address any barriers to healthcare access or medication adherence",
+      "Screen for and treat sleep apnea if present",
+      "Prioritize diabetes prevention as your top health goal"
+    ],
+    "diet": [
+      "Work with a dietitian to create a structured meal plan",
+      "Completely eliminate sugary beverages, candies, and desserts",
+      "Focus on whole, unprocessed foods only",
+      "Strictly control carbohydrate portions at each meal",
+      "Never skip meals to avoid blood sugar fluctuations",
+      "Keep a detailed food diary to identify problem patterns",
+      "Consider meal delivery services for healthy, portion-controlled meals",
+      "Learn carbohydrate counting and glycemic index principles"
+    ],
+    "exercise": [
+      "Start with 10-15 minutes of gentle activity daily and gradually increase",
+      "Consult your doctor before starting any new exercise program",
+      "Focus on consistency over intensity initially",
+      "Consider supervised exercise programs or cardiac rehabilitation",
+      "Incorporate movement throughout the day, not just dedicated exercise time",
+      "Monitor blood sugar before and after exercise if advised by your doctor"
+    ],
+    "monitoring": [
+      "Check blood sugar as directed by your healthcare provider",
+      "Monitor blood pressure daily if you have hypertension",
+      "Track weight weekly to monitor progress",
+      "Keep a symptom diary to discuss with your doctor",
+      "Set up reminders for medications and health checks",
+      "Use apps or devices to track health metrics consistently"
+    ]
+  },
+  "general_tips": {
+    "lifestyle": [
+      "Quit smoking - it significantly increases diabetes risk",
+      "Limit alcohol to moderate consumption (1 drink/day for women, 2 for men)",
+      "Prioritize sleep quality and quantity",
+      "Practice stress management techniques daily",
+      "Stay socially connected and maintain support networks",
+      "Set SMART goals (Specific, Measurable, Achievable, Relevant, Time-bound)",
+      "Celebrate small victories and progress",
+      "Don't be too hard on yourself - focus on progress, not perfection"
+    ],
+    "prevention": [
+      "Know your family history of diabetes and related conditions",
+      "Understand your personal risk factors",
+      "Get regular health screenings appropriate for your age",
+      "Stay informed about diabetes prevention research and recommendations",
+      "Advocate for your health in medical settings",
+      "Keep records of your health metrics and test results",
+      "Build a healthcare team that supports your prevention goals"
+    ]
+  }
+}

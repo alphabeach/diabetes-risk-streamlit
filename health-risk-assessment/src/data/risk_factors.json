@@ -1,0 +1,39 @@
+{
+  "risk_factors": {
+    "age": {
+      "low": 0,
+      "medium": 1,
+      "high": 2
+    },
+    "smoking": {
+      "non_smoker": 0,
+      "former_smoker": 1,
+      "current_smoker": 2
+    },
+    "exercise": {
+      "active": 0,
+      "moderate": 1,
+      "inactive": 2
+    },
+    "diet": {
+      "healthy": 0,
+      "average": 1,
+      "unhealthy": 2
+    },
+    "family_history": {
+      "none": 0,
+      "some": 1,
+      "significant": 2
+    },
+    "cholesterol": {
+      "normal": 0,
+      "borderline": 1,
+      "high": 2
+    },
+    "blood_pressure": {
+      "normal": 0,
+      "elevated": 1,
+      "high": 2
+    }
+  }
+}
