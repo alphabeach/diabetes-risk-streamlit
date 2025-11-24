@@ -17,7 +17,8 @@ from src.utils.database import (
     get_statistics,
     delete_assessment,
     export_to_excel,
-    is_cloud_environment
+    is_cloud_environment,
+    get_sheet_configured
 )
 
 
@@ -27,16 +28,21 @@ def display_admin_dashboard():
     st.title("📊 Admin Dashboard")
     st.markdown("View assessment history, statistics, and insights.")
     
-    # Check if in cloud environment
-    if is_cloud_environment():
+    # Check if in cloud environment without Google Sheets configured
+    if is_cloud_environment() and not get_sheet_configured():
         st.warning("""
-        ℹ️ **Cloud Deployment Notice**
+        ℹ️ **Cloud Storage Not Configured**
         
-        Assessment data is not saved on Streamlit Cloud due to the read-only filesystem.
+        Assessment data saving is not enabled on this deployment.
         
-        This dashboard is only available when running locally. The app still works perfectly 
-        for providing risk assessments and recommendations - only historical data tracking 
-        is unavailable in the cloud deployment.
+        **To enable cloud saving:**
+        1. Follow the instructions in `SETUP_GOOGLE_SHEET.md`
+        2. Create a public Google Sheet
+        3. Update `GOOGLE_SHEET_ID` in `src/utils/database.py`
+        4. Commit and push changes
+        
+        **Note:** The app still works perfectly for assessments - only historical 
+        data tracking requires this setup.
         """)
         
         st.info("""

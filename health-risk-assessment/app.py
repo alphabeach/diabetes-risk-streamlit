@@ -26,7 +26,7 @@ from src.utils.predictor import make_prediction, get_risk_level, format_probabil
 from src.utils.feature_importance import calculate_feature_importance, get_user_risk_factors
 from src.utils.openrouter_client import generate_recommendations
 from src.utils.pdf_generator import generate_pdf_report
-from src.utils.database import save_assessment, get_statistics, is_cloud_environment
+from src.utils.database import save_assessment, get_statistics, is_cloud_environment, get_sheet_configured
 
 # Import components
 from src.components.input_form import render_input_form, display_input_summary
@@ -125,14 +125,48 @@ def main():
         
         # Show different stats based on environment
         if is_cloud_environment():
-            # Cloud mode - no saved assessments
-            st.info("""
-            **Features Analyzed:** 21
-            
-            **Model:** Gradient Boosting
-            
-            **Your Privacy:** Assessment data is not stored
-            """)
+            # Cloud mode - check if Google Sheets is configured
+            if get_sheet_configured():
+                try:
+                    stats = get_statistics()
+                    if stats and stats.get('total_assessments', 0) > 0:
+                        st.info(f"""
+                        **Total Assessments:** {stats['total_assessments']}
+                        
+                        **High Risk:** {stats['high_risk_count']}
+                        
+                        **Moderate Risk:** {stats['moderate_risk_count']}
+                        
+                        **Low Risk:** {stats['low_risk_count']}
+                        
+                        💾 *Saved to Google Sheets*
+                        """)
+                    else:
+                        st.info("""
+                        **Features Analyzed:** 21
+                        
+                        **Model:** Gradient Boosting
+                        
+                        💾 *Cloud saving enabled*
+                        """)
+                except:
+                    st.info("""
+                    **Features Analyzed:** 21
+                    
+                    **Model:** Gradient Boosting
+                    
+                    💾 *Cloud saving enabled*
+                    """)
+            else:
+                st.info("""
+                **Features Analyzed:** 21
+                
+                **Model:** Gradient Boosting
+                
+                ℹ️ *Cloud saving disabled*
+                
+                See `SETUP_GOOGLE_SHEET.md` to enable
+                """)
         else:
             # Local mode - try to show saved stats
             try:

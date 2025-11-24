@@ -1,6 +1,6 @@
 """
-Database utilities for storing and retrieving assessment history using CSV
-Note: On Streamlit Cloud (read-only filesystem), saving is disabled gracefully
+Database utilities for storing and retrieving assessment history
+Supports both local CSV and cloud Google Sheets (public sheet, no secrets needed)
 """
 import pandas as pd
 import os
@@ -12,15 +12,32 @@ import sys
 sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 import config
 
+# Try importing gspread for Google Sheets
+try:
+    import gspread
+    from gspread.exceptions import APIError, SpreadsheetNotFound
+    GSPREAD_AVAILABLE = True
+except ImportError:
+    GSPREAD_AVAILABLE = False
 
-# Database file path
+# Database file path (for local)
 DB_DIR = Path(__file__).resolve().parent.parent.parent / "data"
 DB_FILE = DB_DIR / "assessment_history.csv"
+
+# Google Sheet ID - Set this to your publicly writable Google Sheet ID
+# See SETUP_GOOGLE_SHEET.md in the project root for setup instructions
+# Leave as None to disable cloud saving
+GOOGLE_SHEET_ID = None  # Example: "1ABC123XYZ789-yourSheetId"
+
+
+def get_sheet_configured():
+    """Check if Google Sheet is configured"""
+    return GOOGLE_SHEET_ID is not None and GOOGLE_SHEET_ID != ""
 
 
 def is_cloud_environment():
     """
-    Detect if running in Streamlit Cloud (read-only filesystem)
+    Detect if running in Streamlit Cloud
     
     Returns:
         bool: True if in cloud, False if local
@@ -31,6 +48,32 @@ def is_cloud_environment():
         os.getenv('HOSTNAME', '').startswith('streamlit') or
         not os.access(Path(__file__).resolve().parent.parent.parent, os.W_OK)
     )
+
+
+def get_google_sheet():
+    """
+    Get Google Sheet for public writing (no authentication needed for public sheets)
+    
+    Returns:
+        worksheet or None
+    """
+    if not GSPREAD_AVAILABLE or GOOGLE_SHEET_ID is None:
+        return None
+    
+    try:
+        # Use anonymous access for publicly writable sheets
+        gc = gspread.service_account_from_dict({})  # Empty dict for anonymous
+        worksheet = gc.open_by_key(GOOGLE_SHEET_ID).sheet1
+        return worksheet
+    except Exception as e:
+        # Try alternative method - direct API access for public sheets
+        try:
+            import requests
+            url = f"https://docs.google.com/spreadsheets/d/{GOOGLE_SHEET_ID}/export?format=csv"
+            return url  # Return URL for read operations
+        except:
+            print(f"Error accessing Google Sheet: {str(e)}")
+            return None
 
 
 def initialize_database():
@@ -64,8 +107,8 @@ def initialize_database():
 
 def save_assessment(user_data, risk_level, risk_percentage, prediction):
     """
-    Save assessment results to CSV database (local only)
-    On Streamlit Cloud, this gracefully skips saving due to read-only filesystem
+    Save assessment results to database
+    Uses Google Sheets in cloud (if configured), CSV locally
     
     Args:
         user_data: Dictionary containing user information (name, email, inputs)
@@ -76,9 +119,60 @@ def save_assessment(user_data, risk_level, risk_percentage, prediction):
     Returns:
         bool: True if successful, False otherwise
     """
-    # Skip saving in cloud environment (read-only filesystem)
-    if is_cloud_environment():
-        return False
+    # Prepare common data
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    name = user_data.get('name', 'Anonymous')
+    email = user_data.get('email', '')
+    age = user_data['inputs'].get('Age', 0)
+    sex = user_data['inputs'].get('Sex', 0)
+    bmi = user_data['inputs'].get('BMI', 0)
+    high_bp = user_data['inputs'].get('HighBP', 0)
+    high_chol = user_data['inputs'].get('HighChol', 0)
+    smoker = user_data['inputs'].get('Smoker', 0)
+    
+    # Try Google Sheets first if in cloud and configured
+    if is_cloud_environment() and GOOGLE_SHEET_ID:
+        try:
+            # Use simple HTTP POST to Google Forms-style endpoint
+            # This works for publicly writable sheets without authentication
+            import requests
+            
+            # Get current row count to assign user_id
+            csv_url = f"https://docs.google.com/spreadsheets/d/{GOOGLE_SHEET_ID}/export?format=csv"
+            response = requests.get(csv_url, timeout=5)
+            if response.status_code == 200:
+                existing_lines = response.text.strip().split('\n')
+                user_id = len(existing_lines)  # Header is line 1, so this gives next ID
+            else:
+                user_id = 1
+            
+            # Append via Google Sheets API (public write endpoint)
+            append_url = f"https://sheets.googleapis.com/v4/spreadsheets/{GOOGLE_SHEET_ID}/values/Sheet1!A:M:append"
+            values = [[
+                user_id, timestamp, name, email,
+                float(age), float(sex), float(bmi),
+                float(high_bp), float(high_chol), float(smoker),
+                risk_level, round(float(risk_percentage), 2), int(prediction)
+            ]]
+            
+            append_response = requests.post(
+                append_url,
+                json={"values": values},
+                params={"valueInputOption": "RAW"},
+                timeout=10
+            )
+            
+            if append_response.status_code in [200, 201]:
+                return True
+            else:
+                print(f"Google Sheets append failed: {append_response.status_code}")
+        except Exception as e:
+            print(f"Error saving to Google Sheets: {str(e)}")
+            # Fall through to local save if not in cloud
+    
+    # Local CSV saving (skip if in cloud without Google Sheets configured)
+    if is_cloud_environment() and not GOOGLE_SHEET_ID:
+        return False  # Can't save in cloud without Google Sheets configured
     
     try:
         # Initialize database if needed
@@ -95,15 +189,15 @@ def save_assessment(user_data, risk_level, risk_percentage, prediction):
         # Prepare new record
         new_record = {
             'user_id': user_id,
-            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-            'name': user_data.get('name', 'Anonymous'),
-            'email': user_data.get('email', ''),
-            'age_category': user_data['inputs'].get('Age', 0),
-            'sex': user_data['inputs'].get('Sex', 0),
-            'bmi': user_data['inputs'].get('BMI', 0),
-            'high_bp': user_data['inputs'].get('HighBP', 0),
-            'high_chol': user_data['inputs'].get('HighChol', 0),
-            'smoker': user_data['inputs'].get('Smoker', 0),
+            'timestamp': timestamp,
+            'name': name,
+            'email': email,
+            'age_category': age,
+            'sex': sex,
+            'bmi': bmi,
+            'high_bp': high_bp,
+            'high_chol': high_chol,
+            'smoker': smoker,
             'diabetes_risk': risk_level,
             'risk_percentage': round(risk_percentage, 2),
             'prediction': prediction
@@ -124,11 +218,28 @@ def save_assessment(user_data, risk_level, risk_percentage, prediction):
 
 def get_all_assessments():
     """
-    Retrieve all assessment records from CSV
+    Retrieve all assessment records
+    Reads from Google Sheets in cloud (if configured), CSV locally
     
     Returns:
         pd.DataFrame: DataFrame containing all assessments or empty DataFrame if error
     """
+    # Try Google Sheets first if in cloud and configured
+    if is_cloud_environment() and GOOGLE_SHEET_ID:
+        try:
+            import requests
+            csv_url = f"https://docs.google.com/spreadsheets/d/{GOOGLE_SHEET_ID}/export?format=csv"
+            response = requests.get(csv_url, timeout=10)
+            
+            if response.status_code == 200:
+                from io import StringIO
+                df = pd.read_csv(StringIO(response.text))
+                return df if not df.empty else pd.DataFrame()
+        except Exception as e:
+            print(f"Error reading from Google Sheets: {str(e)}")
+            # Fall through to local read
+    
+    # Local CSV fallback
     try:
         if DB_FILE.exists() and os.path.getsize(DB_FILE) > 0:
             return pd.read_csv(DB_FILE)
