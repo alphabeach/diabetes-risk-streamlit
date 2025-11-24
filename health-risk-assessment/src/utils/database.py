@@ -27,7 +27,7 @@ DB_FILE = DB_DIR / "assessment_history.csv"
 # Google Sheet ID - Set this to your publicly writable Google Sheet ID
 # See SETUP_GOOGLE_SHEET.md in the project root for setup instructions
 # Leave as None to disable cloud saving
-GOOGLE_SHEET_ID = None  # Example: "1ABC123XYZ789-yourSheetId"
+GOOGLE_SHEET_ID = "1zvVYeJs3rTMhRmeh-AxPSe6SAFGaXELYkVyhSwSMoho"  # Example: "1ABC123XYZ789-yourSheetId"
 
 
 def get_sheet_configured():
