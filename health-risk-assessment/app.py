@@ -26,7 +26,7 @@ from src.utils.predictor import make_prediction, get_risk_level, format_probabil
 from src.utils.feature_importance import calculate_feature_importance, get_user_risk_factors
 from src.utils.openrouter_client import generate_recommendations
 from src.utils.pdf_generator import generate_pdf_report
-from src.utils.database import save_assessment, get_statistics
+from src.utils.database import save_assessment, get_statistics, is_cloud_environment
 
 # Import components
 from src.components.input_form import render_input_form, display_input_summary
@@ -123,19 +123,39 @@ def main():
         st.markdown("---")
         st.markdown("### 📊 Quick Stats")
         
-        try:
-            stats = get_statistics()
-            if stats and stats.get('total_assessments', 0) > 0:
-                st.info(f"""
-                **Total Assessments:** {stats['total_assessments']}
-                
-                **High Risk:** {stats['high_risk_count']}
-                
-                **Moderate Risk:** {stats['moderate_risk_count']}
-                
-                **Low Risk:** {stats['low_risk_count']}
-                """)
-            else:
+        # Show different stats based on environment
+        if is_cloud_environment():
+            # Cloud mode - no saved assessments
+            st.info("""
+            **Features Analyzed:** 21
+            
+            **Model:** Gradient Boosting
+            
+            **Your Privacy:** Assessment data is not stored
+            """)
+        else:
+            # Local mode - try to show saved stats
+            try:
+                stats = get_statistics()
+                if stats and stats.get('total_assessments', 0) > 0:
+                    st.info(f"""
+                    **Total Assessments:** {stats['total_assessments']}
+                    
+                    **High Risk:** {stats['high_risk_count']}
+                    
+                    **Moderate Risk:** {stats['moderate_risk_count']}
+                    
+                    **Low Risk:** {stats['low_risk_count']}
+                    """)
+                else:
+                    st.info("""
+                    **Features Analyzed:** 21
+                    
+                    **Model:** Gradient Boosting
+                    
+                    **Accuracy:** High performance on validation data
+                    """)
+            except:
                 st.info("""
                 **Features Analyzed:** 21
                 
@@ -143,14 +163,6 @@ def main():
                 
                 **Accuracy:** High performance on validation data
                 """)
-        except:
-            st.info("""
-            **Features Analyzed:** 21
-            
-            **Model:** Gradient Boosting
-            
-            **Accuracy:** High performance on validation data
-            """)
         
         st.markdown("---")
         st.markdown("### 💡 Tips")
@@ -293,15 +305,19 @@ def display_assessment_page(show_debug):
                 }
                 st.session_state.assessment_complete = True
                 
-                # Save to database
+                # Save to database (only works locally, not on Streamlit Cloud)
                 try:
                     user_data = {
                         'name': user_info['name'],
                         'email': user_info['email'],
                         'inputs': user_inputs
                     }
-                    save_assessment(user_data, risk_level, risk_percentage, prediction)
+                    saved = save_assessment(user_data, risk_level, risk_percentage, prediction)
+                    if not saved and is_cloud_environment():
+                        # Don't show warning in cloud - it's expected behavior
+                        pass
                 except Exception as db_error:
+                    # Silently handle save errors in production
                     if show_debug:
                         st.warning(f"Note: Assessment not saved to history: {str(db_error)}")
                 

@@ -1,5 +1,6 @@
 """
 Database utilities for storing and retrieving assessment history using CSV
+Note: On Streamlit Cloud (read-only filesystem), saving is disabled gracefully
 """
 import pandas as pd
 import os
@@ -15,6 +16,21 @@ import config
 # Database file path
 DB_DIR = Path(__file__).resolve().parent.parent.parent / "data"
 DB_FILE = DB_DIR / "assessment_history.csv"
+
+
+def is_cloud_environment():
+    """
+    Detect if running in Streamlit Cloud (read-only filesystem)
+    
+    Returns:
+        bool: True if in cloud, False if local
+    """
+    # Check for common cloud environment indicators
+    return (
+        os.getenv('STREAMLIT_SHARING_MODE') is not None or
+        os.getenv('HOSTNAME', '').startswith('streamlit') or
+        not os.access(Path(__file__).resolve().parent.parent.parent, os.W_OK)
+    )
 
 
 def initialize_database():
@@ -48,7 +64,8 @@ def initialize_database():
 
 def save_assessment(user_data, risk_level, risk_percentage, prediction):
     """
-    Save assessment results to CSV database
+    Save assessment results to CSV database (local only)
+    On Streamlit Cloud, this gracefully skips saving due to read-only filesystem
     
     Args:
         user_data: Dictionary containing user information (name, email, inputs)
@@ -59,6 +76,10 @@ def save_assessment(user_data, risk_level, risk_percentage, prediction):
     Returns:
         bool: True if successful, False otherwise
     """
+    # Skip saving in cloud environment (read-only filesystem)
+    if is_cloud_environment():
+        return False
+    
     try:
         # Initialize database if needed
         initialize_database()
