@@ -22,51 +22,50 @@ Assess your pre-diabetes risk based on lifestyle and health indicators. The app 
 3. Receive your risk score (Low / Moderate / High)
 4. Get personalized AI-powered recommendations to reduce your risk
 
-## Project Structure
+> **Note:** The app may take a minute or two to load on first visit if no users are currently active. This is normal — the server is warming up.
+
+---
+
+## Streamlit App
+
+### Project Structure
 
 ```
-.
-├── health-risk-assessment/    # Streamlit web application
-│   ├── app.py                 # Application entry point
-│   ├── config.py              # Configuration and feature definitions
-│   ├── src/
-│   │   ├── components/        # UI components (forms, displays, charts)
-│   │   ├── utils/             # Utilities (predictor, PDF, database, API)
-│   │   ├── models/            # Risk model logic
-│   │   └── data/              # Health tips and risk factor data
-│   ├── models/                # Trained model files (.pkl)
-│   └── requirements.txt
-├── scripts/                   # ML training and evaluation pipeline
-│   ├── preprocessing.py       # Data loading and feature engineering
-│   ├── confusion.py           # Model training, evaluation, and confusion matrices
-│   ├── visualization.py       # ROC, calibration, and probability plots
-│   ├── metrics.py             # Model metrics and calibration analysis
-│   └── predict.py             # CLI-based risk predictor
-├── data/                      # Training datasets
-├── models/                    # Saved models and preprocessors
-└── outputs/                   # Evaluation results and plots
-```
-
-## Getting Started
-
-### Prerequisites
-
-- Python 3.10+
-- pip
-
-### Installation
-
-```bash
-git clone https://github.com/alphabeach/diabetes-risk-streamlit.git
-cd diabetes-risk-streamlit
-pip install -r health-risk-assessment/requirements.txt
+health-risk-assessment/
+├── app.py                 # Application entry point
+├── config.py              # Configuration and feature definitions
+├── src/
+│   ├── components/        # UI components (forms, displays, charts)
+│   ├── utils/             # Utilities (predictor, PDF, database, API)
+│   ├── models/            # Risk model logic
+│   └── data/              # Health tips and risk factor data
+├── models/                # Trained model files (.pkl)
+└── requirements.txt
 ```
 
 ### Running the App
 
 ```bash
+git clone https://github.com/alphabeach/diabetes-risk-streamlit.git
+cd diabetes-risk-streamlit
+pip install -r health-risk-assessment/requirements.txt
 cd health-risk-assessment
 streamlit run app.py
+```
+
+---
+
+## Training Pipeline
+
+### Project Structure
+
+```
+scripts/
+├── preprocessing.py       # Data loading and feature engineering
+├── confusion.py           # Model training, evaluation, and confusion matrices
+├── visualization.py       # ROC, calibration, and probability plots
+├── metrics.py             # Model metrics and calibration analysis
+└── predict.py             # CLI-based risk predictor
 ```
 
 ### Training Models
@@ -79,7 +78,7 @@ python visualization.py    # Generate ROC, calibration, and probability plots
 python metrics.py          # Detailed model metrics and calibration analysis
 ```
 
-## Models
+### Models
 
 | Model | AUC | F1 Score |
 |-------|-----|----------|
@@ -87,10 +86,12 @@ python metrics.py          # Detailed model metrics and calibration analysis
 | Logistic Regression | 0.823 | 0.750 |
 | Linear SVM | 0.823 | 0.750 |
 
+---
+
 ## Tech Stack
 
 - **Frontend:** Streamlit
 - **ML:** scikit-learn, imbalanced-learn
 - **AI Recommendations:** OpenRouter API (Claude 3.5 Sonnet)
 - **PDF:** ReportLab
-- **Dataset:** BRFSS Diabetes Dataset (70,692 records)
+- **Dataset:** BRFSS Diabetes Dataset (70,692 records, 21 features)
