@@ -1,65 +1,34 @@
-# Health Risk Assessment Project
+# Diabetes Risk Streamlit
 
-This project is a web application designed to assess health risks based on user inputs. It utilizes a Streamlit interface to provide an interactive experience for users to input their health data and receive personalized risk assessments.
+AI-powered pre-diabetes risk prediction tool built with Streamlit and scikit-learn.
+
+## About
+
+Assess your pre-diabetes risk based on lifestyle and health indicators. The app uses a Gradient Boosting model trained on the BRFSS dataset (70,000+ records) to provide instant risk predictions with personalized insights.
 
 ## Features
 
-- User-friendly interface for health data input.
-- Risk assessment calculations based on user inputs.
-- Display of personalized risk factor analysis and actionable health recommendations.
-- Validation of user inputs to ensure data integrity.
-- Data processing utilities for handling risk factors.
+- **Instant Risk Assessment** — Get your diabetes risk score in seconds
+- **Personalized Insights** — AI-generated health recommendations via OpenRouter API
+- **Factor Analysis** — See which lifestyle factors affect your risk most
+- **PDF Reports** — Download a summary of your assessment
+- **Population Comparison** — Compare your results to national averages
+- **Admin Dashboard** — View assessment history and statistics
 
-## Project Structure
+## How It Works
 
-```
-health-risk-assessment
-├── src
-│   ├── app.py                     # Main entry point for the Streamlit application
-│   ├── components
-│   │   ├── __init__.py            # Marks components directory as a package
-│   │   ├── assessment_form.py      # Renders the health data input form
-│   │   ├── risk_calculator.py      # Calculates risk based on user inputs
-│   │   └── results_display.py      # Displays the results of the risk assessment
-│   ├── models
-│   │   ├── __init__.py            # Marks models directory as a package
-│   │   └── risk_model.py          # Logic for the risk assessment model
-│   ├── utils
-│   │   ├── __init__.py            # Marks utils directory as a package
-│   │   ├── data_processing.py      # Functions for processing and formatting data
-│   │   └── validators.py           # Validation functions for user inputs
-│   └── data
-│       └── risk_factors.json      # Predefined risk factors and their values
-├── requirements.txt                # Lists project dependencies
-├── config.py                       # Configuration settings for the application
-└── README.md                       # Documentation for the project
-```
+1. Fill out the health assessment form with 21 lifestyle/health indicators
+2. The Gradient Boosting model analyzes your inputs
+3. Receive your risk score (Low / Moderate / High)
+4. Get personalized AI-powered recommendations to reduce your risk
 
-## Installation
+## Tech Stack
 
-1. Clone the repository:
-   ```
-   git clone <repository-url>
-   cd health-risk-assessment
-   ```
+- **Frontend:** Streamlit
+- **ML Model:** Gradient Boosting (AUC: 0.83)
+- **AI Recommendations:** OpenRouter API (Claude 3.5 Sonnet)
+- **Dataset:** BRFSS Diabetes Dataset (70,692 records, 21 features)
 
-2. Install the required dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
+---
 
-3. Run the application:
-   ```
-   streamlit run src/app.py
-   ```
-
-## Usage
-
-- Open the application in your web browser.
-- Fill out the health data input form with the required information.
-- Submit the form to receive your health risk assessment results.
-- Review the personalized risk factor analysis and recommendations provided.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a pull request or open an issue for any suggestions or improvements.
+For full project documentation, training scripts, and model details, see the [root README](../README.md).

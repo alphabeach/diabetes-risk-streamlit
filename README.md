@@ -1,14 +1,26 @@
 # Diabetes Risk Streamlit
 
-An AI-powered web application for predicting pre-diabetes risk based on lifestyle indicators. Built with Streamlit and machine learning models trained on the BRFSS (Behavioral Risk Factor Surveillance System) dataset.
+AI-powered pre-diabetes risk prediction tool built with Streamlit and scikit-learn.
+
+## About
+
+Assess your pre-diabetes risk based on lifestyle and health indicators. The app uses a Gradient Boosting model trained on the BRFSS dataset (70,000+ records) to provide instant risk predictions with personalized insights.
 
 ## Features
 
-- **Risk Prediction** — Real-time diabetes risk assessment using Gradient Boosting, Logistic Regression, and Linear SVM models
+- **Instant Risk Assessment** — Get your diabetes risk score in seconds
 - **Personalized Insights** — AI-generated health recommendations via OpenRouter API
-- **Factor Analysis** — Breakdown of individual risk contributors with visual comparisons
-- **PDF Reports** — Downloadable summary of assessment results
-- **Admin Dashboard** — View assessment history and population statistics
+- **Factor Analysis** — See which lifestyle factors affect your risk most
+- **PDF Reports** — Download a summary of your assessment
+- **Population Comparison** — Compare your results to national averages
+- **Admin Dashboard** — View assessment history and statistics
+
+## How It Works
+
+1. Fill out the health assessment form with 21 lifestyle/health indicators
+2. The Gradient Boosting model analyzes your inputs
+3. Receive your risk score (Low / Moderate / High)
+4. Get personalized AI-powered recommendations to reduce your risk
 
 ## Project Structure
 
@@ -79,6 +91,6 @@ python metrics.py          # Detailed model metrics and calibration analysis
 
 - **Frontend:** Streamlit
 - **ML:** scikit-learn, imbalanced-learn
-- **API:** OpenRouter (Claude 3.5 Sonnet)
+- **AI Recommendations:** OpenRouter API (Claude 3.5 Sonnet)
 - **PDF:** ReportLab
-- **Data:** BRFSS Diabetes Dataset
+- **Dataset:** BRFSS Diabetes Dataset (70,692 records)
