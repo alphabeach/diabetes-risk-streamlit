@@ -2,9 +2,14 @@ import numpy as np
 import pandas as pd
 import joblib
 
+import os
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(SCRIPT_DIR)
+
 # === Load trained model and preprocessor ===
-MODEL_PATH = "models/Gradient_Boosting.pkl"
-PREPROCESSOR_PATH = "models/preprocessor2.pkl"
+MODEL_PATH = os.path.join(ROOT_DIR, "models", "Gradient_Boosting.pkl")
+PREPROCESSOR_PATH = os.path.join(ROOT_DIR, "models", "preprocessor2.pkl")
 
 print("🔄 Loading model and preprocessor...")
 model = joblib.load(MODEL_PATH)

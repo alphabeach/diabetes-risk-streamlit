@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pandas as pd
 import joblib
@@ -11,10 +12,13 @@ from sklearn.metrics import (
 )
 from sklearn.calibration import calibration_curve
 
-MODEL_PATH = "models/Gradient_Boosting.pkl"
-PREPROCESSOR_PATH = "models/preprocessor2.pkl"
-DATA_PATH = "data/diabetes2.csv"  
-SAVE_PLOT_PATH = "calibration_curve.png"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(SCRIPT_DIR)
+
+MODEL_PATH = os.path.join(ROOT_DIR, "models", "Gradient_Boosting.pkl")
+PREPROCESSOR_PATH = os.path.join(ROOT_DIR, "models", "preprocessor2.pkl")
+DATA_PATH = os.path.join(ROOT_DIR, "data", "diabetes2.csv")
+SAVE_PLOT_PATH = os.path.join(ROOT_DIR, "outputs", "plots", "calibration_curve.png")
 Q_BINS = 3
 LABELS = ["Low", "Moderate", "High"]
 

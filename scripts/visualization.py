@@ -7,8 +7,11 @@ import numpy as np
 from sklearn.metrics import roc_curve, roc_auc_score
 from sklearn.calibration import calibration_curve
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(SCRIPT_DIR)
+
 # === Paths ===
-OUTPUT_DIR = "outputs"
+OUTPUT_DIR = os.path.join(ROOT_DIR, "outputs")
 PLOTS_DIR = os.path.join(OUTPUT_DIR, "plots")
 os.makedirs(PLOTS_DIR, exist_ok=True)
 

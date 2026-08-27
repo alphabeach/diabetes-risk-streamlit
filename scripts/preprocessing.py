@@ -7,9 +7,12 @@ from sklearn.model_selection import train_test_split
 import joblib
 import os
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(SCRIPT_DIR)
+
 # === Hardcoded path to your dataset ===
-DATA_PATH = "data/diabetes2.csv"
-OUTPUT_DIR = "models"
+DATA_PATH = os.path.join(ROOT_DIR, "data", "diabetes2.csv")
+OUTPUT_DIR = os.path.join(ROOT_DIR, "models")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # === Load the dataset ===
@@ -64,7 +67,7 @@ preprocessor.fit(X_train)
 print("✅ Preprocessing complete!")
 
 # === Save preprocessor and processed datasets ===
-joblib.dump(preprocessor, os.path.join(OUTPUT_DIR, "preprocessor2.pkl"))
+joblib.dump(preprocessor, os.path.join(OUTPUT_DIR, "preprocessor2.pkl"), compress=3)
 
 # Transform the data and save processed copies for model training
 X_train_processed = preprocessor.transform(X_train)

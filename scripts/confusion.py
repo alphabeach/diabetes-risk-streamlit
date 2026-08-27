@@ -19,9 +19,12 @@ from sklearn.metrics import (
     confusion_matrix
 )
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(SCRIPT_DIR)
+
 # === Paths ===
-MODEL_DIR = "models"
-OUTPUT_DIR = "outputs"
+MODEL_DIR = os.path.join(ROOT_DIR, "models")
+OUTPUT_DIR = os.path.join(ROOT_DIR, "outputs")
 PLOTS_DIR = os.path.join(OUTPUT_DIR, "plots")
 os.makedirs(MODEL_DIR, exist_ok=True)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -81,7 +84,8 @@ for name, model in models.items():
     print(f"🖼️ Confusion matrix image saved: {cm_path}")
 
     # === Save model + predictions ===
-    joblib.dump(model, os.path.join(MODEL_DIR, f"{name}.pkl"))
+    filename = "gradient_boosting_model.pkl" if name == "Gradient_Boosting" else f"{name}.pkl"
+    joblib.dump(model, os.path.join(MODEL_DIR, filename), compress=3)
     pd.DataFrame({
         "Actual": y_test,
         "Predicted_Prob": y_pred_prob
